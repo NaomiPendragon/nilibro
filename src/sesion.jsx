@@ -10,8 +10,13 @@ export function SesionProvider({ children }) {
 
   const cargarPerfil = useCallback(async (usuarioId) => {
     if (!usuarioId) return setPerfil(null)
-    const { data } = await supabase.from('usuario').select('*').eq('id', usuarioId).maybeSingle()
-    setPerfil(data)
+    // La columna rol no es legible desde la API (no se expone quién es admin):
+    // el rol propio se consulta con la función es_admin() de la base de datos
+    const [{ data }, { data: admin }] = await Promise.all([
+      supabase.from('usuario').select('id, nickname, foto_perfil, fecha_registro').eq('id', usuarioId).maybeSingle(),
+      supabase.rpc('es_admin'),
+    ])
+    setPerfil(data && { ...data, rol: admin ? 'admin' : 'lector' })
   }, [])
 
   useEffect(() => {

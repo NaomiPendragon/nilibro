@@ -9,6 +9,8 @@
 --   2. Conversación dentro de cada club             (RF-09)
 --   3. Reportes de contenido para moderación        (RF-10)
 --   4. Buckets de Storage y sus políticas           (portadas, fotos, PDFs)
+--   5. Administrador (instrucción manual)
+--   6. Lectura pública más estricta                 (obras en borrador, rol)
 -- =============================================================================
 
 
@@ -148,3 +150,36 @@ CREATE POLICY nilibro_borra_propio ON storage.objects FOR DELETE TO authenticate
 --
 --   UPDATE usuario SET rol = 'admin' WHERE lower(nickname) = 'tu_nickname';
 -- =============================================================================
+
+
+-- =============================================================================
+-- 6. LECTURA PÚBLICA MÁS ESTRICTA
+--
+-- Revisión de lo que se puede leer con la llave pública (anon), que viaja en el
+-- código del navegador. Esta sección se puede correr sola y más de una vez.
+-- =============================================================================
+
+-- 6.1 Una obra solo es visible si tiene algún libro publicado (o para su autor
+-- y el admin). Antes era USING (true): el título y la sinopsis de las obras en
+-- borrador se podían leer sin sesión aunque su libro estuviera oculto.
+CREATE OR REPLACE FUNCTION obra_publicada(p_obra_id bigint)
+RETURNS boolean
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path = ''
+AS $$
+    SELECT EXISTS (
+        SELECT 1 FROM public.libro
+         WHERE obra_id = p_obra_id AND estado = 'publicado'
+    );
+$$;
+
+DROP POLICY IF EXISTS lectura_publica      ON obra;
+DROP POLICY IF EXISTS lectura_si_publicada ON obra;
+CREATE POLICY lectura_si_publicada ON obra FOR SELECT
+    USING (obra_publicada(id) OR es_autor(autor_id) OR es_admin());
+
+-- 6.2 La columna rol deja de ser legible desde la API, para no revelar qué
+-- cuentas son administradoras. El perfil público sigue visible; cada usuario
+-- consulta su propio rol con la función es_admin().
+REVOKE SELECT ON usuario FROM anon, authenticated;
+GRANT  SELECT (id, nickname, foto_perfil, fecha_registro) ON usuario TO anon, authenticated;
+GRANT  EXECUTE ON FUNCTION es_admin() TO anon, authenticated;
