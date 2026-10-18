@@ -14,6 +14,13 @@ function leerPreferencia(clave, porDefecto) {
     return porDefecto
   }
 }
+// Autopublicados: se leen como texto. Catálogo: solo PDF + índice (pagina_pdf).
+function capitulosLegibles(libro) {
+  const conTexto = libro.capitulo.filter((c) => c.contenido?.trim())
+  if (conTexto.length) return { enPdf: false, capitulos: conTexto }
+  return { enPdf: true, capitulos: libro.pdf ? libro.capitulo.filter((c) => c.pagina_pdf) : [] }
+}
+
 function guardarPreferencia(clave, valor) {
   try {
     localStorage.setItem(clave, JSON.stringify(valor))
@@ -47,7 +54,7 @@ export default function Lector() {
 
       // Retomar donde quedó: el último capítulo que empieza antes de la página guardada
       const pagina = entrada?.ultima_pagina_leida ?? 0
-      const caps = data.capitulo.filter((c) => c.contenido?.trim())
+      const caps = capitulosLegibles(data).capitulos
       let inicio = 0
       caps.forEach((c, i) => {
         if ((c.pagina_pdf ?? c.numero_capitulo) <= pagina) inicio = i
@@ -57,7 +64,7 @@ export default function Lector() {
     void cargar()
   }, [id])
 
-  const capitulos = libro?.capitulo.filter((c) => c.contenido?.trim()) ?? []
+  const { enPdf, capitulos } = libro ? capitulosLegibles(libro) : { enPdf: false, capitulos: [] }
   const actual = indice !== null ? capitulos.at(indice) : null
 
   // Guarda el progreso (y agrega el libro a la biblioteca si no estaba)
@@ -110,10 +117,12 @@ export default function Lector() {
             ))}
           </select>
         )}
-        <div className="acciones">
-          <button className="secundario" onClick={cambiarTamano} title="Tamaño de letra">Aa</button>
-          <button className="secundario" onClick={alternarOscuro}>{oscuro ? 'Modo claro' : 'Modo oscuro'}</button>
-        </div>
+        {!enPdf && (
+          <div className="acciones">
+            <button className="secundario" onClick={cambiarTamano} title="Tamaño de letra">Aa</button>
+            <button className="secundario" onClick={alternarOscuro}>{oscuro ? 'Modo claro' : 'Modo oscuro'}</button>
+          </div>
+        )}
       </header>
 
       {actual ? (
@@ -121,10 +130,15 @@ export default function Lector() {
           <div className="progreso" aria-label={`${progreso}% leído`}>
             <div style={{ width: `${progreso}%` }} />
           </div>
-          <article className="lector-texto" style={{ fontSize: TAMANOS.at(tamano) }}>
-            <h1>Capítulo {actual.numero_capitulo}{actual.nombre ? `: ${actual.nombre}` : ''}</h1>
-            {actual.contenido.split('\n').map((parrafo, i) => (parrafo.trim() ? <p key={i}>{parrafo}</p> : null))}
-          </article>
+          {enPdf ? (
+            // key: cambiar solo el #page no recarga el visor; así se abre en la página del capítulo
+            <iframe key={actual.id} className="lector-pdf capitulo" src={`${pdf}#page=${actual.pagina_pdf}`} title={libro.obra.titulo} />
+          ) : (
+            <article className="lector-texto" style={{ fontSize: TAMANOS.at(tamano) }}>
+              <h1>Capítulo {actual.numero_capitulo}{actual.nombre ? `: ${actual.nombre}` : ''}</h1>
+              {actual.contenido.split('\n').map((parrafo, i) => (parrafo.trim() ? <p key={i}>{parrafo}</p> : null))}
+            </article>
+          )}
 
           <nav className="lector-pie">
             <button className="secundario" disabled={indice === 0} onClick={() => setIndice(indice - 1)}>← Anterior</button>
