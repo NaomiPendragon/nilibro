@@ -23,8 +23,16 @@ async function portadaComoJpeg(imagen) {
 // Devuelve el archivo, el total de páginas y la página donde empieza cada
 // capítulo (se guarda en capitulo.pagina_pdf y sirve como marcador de lectura).
 export async function generarPdf({ titulo, autor, sinopsis, capitulos, portada }) {
-  // jsPDF pesa bastante: se carga solo cuando alguien publica
-  const { jsPDF } = await import('jspdf')
+  // jsPDF pesa bastante: se carga solo cuando alguien publica. Si la página se
+  // abrió antes de un deploy nuevo, ese archivo ya no existe en Vercel.
+  let jsPDF
+  try {
+    ;({ jsPDF } = await import('jspdf'))
+  } catch {
+    throw new Error(
+      'Hay una versión nueva de Nilibro. Tu obra quedó guardada como borrador: recarga la página y ábrela desde Perfil → Mis obras para publicarla.',
+    )
+  }
   const doc = new jsPDF({ format: 'a5', unit: 'mm' })
 
   const ancho = doc.internal.pageSize.getWidth()

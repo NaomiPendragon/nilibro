@@ -116,6 +116,8 @@ export default function Publicar() {
         const { data: nuevo, error: errorLibro } = await supabase.from('libro').insert({ obra_id: obra.id }).select('id').single()
         if (errorLibro) throw errorLibro
         id = nuevo.id
+        // Si algo falla más adelante, reintentar actualiza esta obra en vez de crear otra
+        setLibro({ id, estado: 'borrador', portada: null, pdf: null, obra: { id: obra.id, autor: {} } })
       }
 
       if (portada) {
