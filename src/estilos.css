@@ -1,0 +1,160 @@
+:root {
+  --primario: #1f7a6b;
+  --primario-oscuro: #17604f;
+  --primario-suave: #e3f0ed;
+  --fondo: #f3f3f1;
+  --tarjeta: #ffffff;
+  --borde: #dcdcd8;
+  --texto: #1d1d1b;
+  --suave: #6b6b66;
+  --peligro: #b3261e;
+  --vacio: #e4e4e1;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+h1 { font-size: 26px; margin: 0 0 16px; }
+h2 { font-size: 18px; margin: 24px 0 12px; }
+a { color: var(--primario); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.centro { text-align: center; margin-top: 40vh; }
+.suave { color: var(--suave); font-size: 14px; margin: 2px 0; }
+.error { color: var(--peligro); }
+.vacio { text-align: center; color: var(--suave); margin: 40px 0; }
+.crece { flex: 1; min-width: 0; }
+.columna { display: flex; flex-direction: column; gap: 12px; }
+.ancho { width: 100%; text-align: center; }
+
+/* Controles */
+input, select, textarea { font: inherit; padding: 9px 11px; border: 1px solid var(--borde); border-radius: 6px; background: #fff; width: 100%; color: inherit; }
+textarea { resize: vertical; }
+label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+button, .boton { font: inherit; display: inline-block; padding: 9px 14px; border: 1px solid var(--primario); border-radius: 6px; background: var(--primario); color: #fff; cursor: pointer; text-align: center; white-space: nowrap; }
+button:hover, .boton:hover { background: var(--primario-oscuro); text-decoration: none; }
+button:disabled { opacity: .6; cursor: default; }
+.secundario { background: #fff; color: var(--primario); }
+.secundario:hover { background: var(--primario-suave); }
+.peligro { background: #fff; color: var(--peligro); border-color: var(--peligro); }
+.peligro:hover { background: #fbeceb; }
+.enlace { background: none; border: none; color: var(--primario); padding: 0; text-decoration: underline; }
+.enlace:hover { background: none; }
+.pequeno { font-size: 13px; }
+.icono.marcado { color: #c58b00; border-color: #c58b00; }
+.acciones { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: 10px; padding: 16px; }
+.fila { display: flex; align-items: center; gap: 14px; }
+.lista { display: flex; flex-direction: column; gap: 10px; }
+.titulo-seccion { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.titulo-seccion select { width: auto; }
+fieldset { border: 1px dashed var(--borde); }
+
+/* Acceso (Figura 11) */
+.acceso { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.acceso-marca { background: #e6e7e8; display: flex; flex-direction: column; justify-content: center; padding: 48px; }
+.acceso-marca .logo { font-size: 40px; margin: 0; }
+.acceso-marca p { font-size: 24px; font-weight: 600; max-width: 320px; }
+.acceso-formulario { display: flex; align-items: center; justify-content: center; padding: 24px; }
+.acceso-formulario form { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 14px; }
+.cambio { text-align: center; font-size: 14px; margin: 0; }
+
+/* Marco con menú lateral */
+.marco { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+.lateral { background: #fff; border-right: 1px solid var(--borde); padding: 20px 12px; }
+.logo { color: var(--primario); font-size: 24px; font-weight: 700; display: block; margin: 0 8px 20px; }
+.lateral nav { display: flex; flex-direction: column; gap: 4px; }
+.lateral nav a { color: var(--suave); padding: 9px 12px; border-radius: 6px; }
+.lateral nav a:hover { background: var(--fondo); text-decoration: none; }
+.lateral nav a.active { background: var(--primario); color: #fff; font-weight: 600; }
+.contenido { min-width: 0; }
+.barra { display: flex; align-items: center; gap: 16px; padding: 14px 24px; background: #fff; border-bottom: 1px solid var(--borde); }
+.buscador { flex: 1; max-width: 420px; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--vacio); color: var(--suave); display: flex; align-items: center; justify-content: center; font-weight: 600; overflow: hidden; margin-left: auto; flex-shrink: 0; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar.grande { width: 72px; height: 72px; font-size: 26px; margin: 0; }
+main { padding: 24px; max-width: 1100px; }
+
+/* Libros */
+.portada { width: 100%; aspect-ratio: 2 / 3; border-radius: 6px; object-fit: cover; background: var(--vacio); border: 1px solid var(--borde); }
+.portada.vacia { display: flex; align-items: center; justify-content: center; padding: 8px; text-align: center; color: var(--suave); font-size: 13px; }
+.portada.mini { width: 56px; flex-shrink: 0; }
+.cuadricula { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 18px; margin-bottom: 24px; }
+.tarjeta-libro { display: flex; flex-direction: column; gap: 6px; }
+.titulo-libro { color: var(--texto); font-weight: 600; font-size: 14px; }
+.progreso { height: 5px; background: var(--vacio); border-radius: 3px; overflow: hidden; }
+.progreso div { height: 100%; background: var(--primario); }
+.pestanas { display: flex; gap: 4px; background: #fff; border: 1px solid var(--borde); border-radius: 8px; padding: 4px; margin-bottom: 16px; overflow-x: auto; }
+.pestanas button { background: none; border: none; color: var(--suave); }
+.pestanas button.activa { background: var(--primario); color: #fff; }
+.estrellas { color: #c58b00; }
+
+/* Detalle (Figura 14) */
+.detalle { display: grid; grid-template-columns: 240px 1fr; gap: 28px; margin-top: 12px; }
+.detalle-portada { display: flex; flex-direction: column; gap: 10px; }
+.detalle-info { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.detalle-info > * { max-width: 100%; }
+.detalle-info .pestanas, .detalle-info .tarjeta { width: 100%; }
+.sinopsis { white-space: pre-line; line-height: 1.6; }
+.resena-form { display: flex; flex-direction: column; gap: 10px; }
+.resena-form select { width: auto; }
+.resena p { margin: 6px 0; }
+
+/* Publicar (Figura 21) */
+.publicar { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.subir-portada { display: flex; align-items: center; gap: 14px; }
+.subir-portada .portada.mini { width: 72px; }
+.subir-portada label.boton { display: inline-block; }
+.capitulo-editor { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+.publicar .fila { justify-content: space-between; margin-bottom: 10px; }
+.acciones-publicar { display: flex; gap: 10px; margin-top: 16px; }
+.acciones-publicar button { flex: 1; }
+
+/* Perfil (Figura 22) */
+.perfil { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+.perfil-datos { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.perfil-datos > .avatar, .perfil-datos > strong, .perfil-datos > .suave { align-self: center; }
+.cifras { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; margin: 8px 0; }
+.cifras span { display: block; font-size: 12px; color: var(--suave); }
+.dos-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.fase-dos { max-width: 520px; }
+
+/* Ventana de agregar libro (Figura 16) */
+.fondo-modal { position: fixed; inset: 0; background: rgb(0 0 0 / .35); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
+.modal { width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
+.lista-modal { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.lista-modal li { display: flex; align-items: center; gap: 12px; }
+.lista-modal li > div { flex: 1; display: flex; flex-direction: column; }
+
+/* Lector (Figura 15) */
+.lector { min-height: 100vh; background: #fbfaf7; color: var(--texto); }
+.lector.oscuro { background: #1b1c1e; color: #e8e6e1; }
+.lector.oscuro .secundario, .lector.oscuro select, .lector.oscuro textarea { background: #2a2b2e; color: #e8e6e1; border-color: #44464a; }
+.lector.oscuro .comentario { border-color: #44464a; }
+.lector-barra { display: flex; align-items: center; gap: 12px; padding: 12px 24px; border-bottom: 1px solid var(--borde); flex-wrap: wrap; }
+.lector-barra select { width: auto; max-width: 320px; }
+.lector-barra .acciones { margin-left: auto; }
+.lector-texto { max-width: 680px; margin: 0 auto; padding: 32px 20px; line-height: 1.75; }
+.lector-texto h1 { font-size: 1.4em; }
+.lector-pie { max-width: 680px; margin: 0 auto; padding: 0 20px 24px; display: flex; justify-content: space-between; align-items: center; }
+.lector-pdf { width: 100%; height: calc(100vh - 62px); border: 0; }
+.comentarios { max-width: 680px; margin: 0 auto; padding: 0 20px 48px; }
+.comentario { border-left: 3px solid var(--borde); padding: 6px 12px; margin: 10px 0; }
+.comentario p { margin: 4px 0; }
+.respuestas { margin-left: 24px; }
+.comentar { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.comentar button { align-self: flex-start; }
+
+/* Celular (RNF-06) */
+@media (max-width: 760px) {
+  .acceso, .marco, .detalle, .publicar, .perfil, .dos-columnas { grid-template-columns: 1fr; }
+  .acceso-marca { padding: 32px 20px; }
+  .lateral { border-right: none; border-bottom: 1px solid var(--borde); padding: 12px; }
+  .lateral .logo { margin-bottom: 8px; }
+  .lateral nav { flex-direction: row; overflow-x: auto; }
+  .lateral nav a { white-space: nowrap; }
+  main { padding: 16px; }
+  .barra { padding: 12px 16px; }
+  .detalle-portada { max-width: 240px; }
+}
