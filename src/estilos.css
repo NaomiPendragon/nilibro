@@ -121,8 +121,8 @@ main { padding: 24px; max-width: 1100px; }
 .fase-dos { max-width: 520px; }
 
 /* Ventana de agregar libro (Figura 16) */
-.fondo-modal { position: fixed; inset: 0; background: rgb(0 0 0 / .35); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 10; }
-.modal { width: 100%; max-width: 520px; max-height: 90vh; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
+.modal { width: calc(100% - 32px); max-width: 520px; max-height: 90vh; overflow: auto; color: var(--texto); }
+.modal::backdrop { background: rgb(0 0 0 / .35); }
 .lista-modal { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
 .lista-modal li { display: flex; align-items: center; gap: 12px; }
 .lista-modal li > div { flex: 1; display: flex; flex-direction: column; }

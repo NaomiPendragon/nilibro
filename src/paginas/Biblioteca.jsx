@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { mensajeError, supabase } from '../supabase.js'
 import { useSesion } from '../sesion.jsx'
@@ -113,6 +113,11 @@ function AgregarLibro({ usuarioId, yaAgregados, onCerrar, onAgregado }) {
   const [resultados, setResultados] = useState([])
   const [estado, setEstado] = useState('quiero_leer')
   const [error, setError] = useState('')
+  const ventana = useRef(null)
+
+  useEffect(() => {
+    if (!ventana.current.open) ventana.current.showModal()
+  }, [])
 
   useEffect(() => {
     const espera = setTimeout(async () => {
@@ -132,8 +137,9 @@ function AgregarLibro({ usuarioId, yaAgregados, onCerrar, onAgregado }) {
   }
 
   return (
-    <div className="fondo-modal" onClick={onCerrar}>
-      <div className="modal tarjeta" onClick={(e) => e.stopPropagation()} role="dialog" aria-label="Agregar libro">
+    // <dialog> nativo: Esc lo cierra y el foco queda dentro de la ventana (accesibilidad)
+    <dialog ref={ventana} className="modal tarjeta" aria-label="Agregar libro" onClose={onCerrar}>
+      <div className="columna">
         <h2>Agregar libro</h2>
         <input autoFocus value={busqueda} onChange={(e) => setBusqueda(e.target.value)} placeholder="Busca por título" />
         <label>
@@ -162,8 +168,8 @@ function AgregarLibro({ usuarioId, yaAgregados, onCerrar, onAgregado }) {
           ))}
           {resultados.length === 0 && <li className="suave">No se encontraron libros publicados.</li>}
         </ul>
-        <button className="secundario" onClick={onCerrar}>Cerrar</button>
+        <button className="secundario" onClick={() => ventana.current.close()}>Cerrar</button>
       </div>
-    </div>
+    </dialog>
   )
 }

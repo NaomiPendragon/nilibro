@@ -13,13 +13,9 @@ En el SQL Editor, en este orden:
 
 Luego, en **Authentication → Sign In / Providers**, apagar **Confirm email**.
 
-### Catálogo inicial (5 clásicos de dominio público)
+### Catálogo inicial
 
-1. En **Storage**, abrir el bucket `portadas`, crear la carpeta `catalogo` y subir ahí los `.jpg` de `catalogo/portadas/`.
-2. Igual en el bucket `pdfs`: carpeta `catalogo` con los `.pdf` de `catalogo/pdfs/`.
-3. Correr `supabase/catalogo.sql` en el SQL Editor.
-
-Textos de Project Gutenberg (sin su encabezado ni licencia); portadas propias. Como no son autopublicados, sus capítulos guardan solo el nombre y la página del PDF, y el lector los recorre sobre el PDF.
+Los datos de carga (5 clásicos de dominio público con portada y PDF) no van en el repositorio porque la app no los usa; se comparten aparte. Los libros del catálogo no son autopublicados: sus capítulos guardan solo el nombre y la página del PDF, y el lector los recorre sobre el PDF.
 
 Para tener un administrador (puede cargar libros del catálogo con autores sin cuenta y su PDF): regístrate en la app y corre en el SQL Editor:
 
